@@ -2,7 +2,7 @@ const User = require('../models/user');
 const {
   NOT_FOUND_ERROR_CODE,
   DEFAULT_ERROR_CODE,
-  INCORRECT_DATA_ERROR_CODE
+  INCORRECT_DATA_ERROR_CODE,
 } = require('../utils/constants');
 
 module.exports.getUsers = async (req, res) => {
@@ -31,7 +31,7 @@ module.exports.getUser = async (req, res) => {
   } catch (e) {
     if (e.name === 'CastError') {
       res.status(INCORRECT_DATA_ERROR_CODE).json({
-        message: 'Переданы не валидные данные'
+        message: 'Переданы не валидные данные',
       });
       return;
     }
@@ -40,8 +40,6 @@ module.exports.getUser = async (req, res) => {
     });
   }
 };
-
-
 
 module.exports.createUser = async (req, res) => {
   try {
@@ -53,7 +51,7 @@ module.exports.createUser = async (req, res) => {
   } catch (e) {
     if (e.name === 'ValidationError') {
       res.status(INCORRECT_DATA_ERROR_CODE).json({
-        message: 'Переданы не валидные данные'
+        message: 'Переданы не валидные данные',
       });
       return;
     }
@@ -78,7 +76,7 @@ module.exports.updateUserName = async (req, res) => {
   } catch (e) {
     if (e.name === 'ValidationError') {
       res.status(INCORRECT_DATA_ERROR_CODE).json({
-        message: 'Переданы не валидные данные'
+        message: 'Переданы не валидные данные',
       });
       return;
     }
@@ -103,7 +101,7 @@ module.exports.updateUserAvatar = async (req, res) => {
   } catch (e) {
     if (e.name === 'ValidationError') {
       res.status(INCORRECT_DATA_ERROR_CODE).json({
-        message: 'Переданы не валидные данные'
+        message: 'Переданы не валидные данные',
       });
       return;
     }
