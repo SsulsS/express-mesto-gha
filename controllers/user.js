@@ -11,7 +11,7 @@ module.exports.getUsers = async (req, res) => {
     res.send(user);
   } catch (e) {
     res.status(DEFAULT_ERROR_CODE).json({
-      message: 'Не удалось получить пользователей',
+      message: 'На сервере произошла ошибка',
     });
   }
 };
@@ -36,7 +36,7 @@ module.exports.getUser = async (req, res) => {
       return;
     }
     res.status(DEFAULT_ERROR_CODE).json({
-      message: 'Не удалось найти пользователя',
+      message: 'На сервере произошла ошибка',
     });
   }
 };
@@ -58,7 +58,7 @@ module.exports.createUser = async (req, res) => {
       return;
     }
     res.status(DEFAULT_ERROR_CODE).json({
-      message: 'Не удалось создать пользователя',
+      message: 'На сервере произошла ошибка',
     });
   }
 };
@@ -83,7 +83,7 @@ module.exports.updateUserName = async (req, res) => {
       return;
     }
     res.status(DEFAULT_ERROR_CODE).json({
-      message: 'Не удалось изменить пользователя',
+      message: 'На сервере произошла ошибка',
     });
   }
 };
@@ -108,7 +108,7 @@ module.exports.updateUserAvatar = async (req, res) => {
       return;
     }
     res.status(DEFAULT_ERROR_CODE).json({
-      message: 'Не удалось изменить пользователя',
+      message: 'На сервере произошла ошибка',
     });
   }
 };

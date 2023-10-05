@@ -13,7 +13,7 @@ module.exports.getCards = async (req, res) => {
     res.send(cards);
   } catch (e) {
     res.status(DEFAULT_ERROR_CODE).json({
-      message: 'Не удалось получить карточки',
+      message: 'На сервере произошла ошибка',
     });
   }
 };
@@ -29,12 +29,12 @@ module.exports.createCard = async (req, res) => {
   } catch (e) {
     if (e.name === 'ValidationError') {
       res.status(INCORRECT_DATA_ERROR_CODE).json({
-        message: 'Переданы не валидные данные'
+        message: 'Переданы не валидные данные',
       });
       return;
     }
     res.status(DEFAULT_ERROR_CODE).json({
-      message: 'Не удалось создать карточку',
+      message: 'На сервере произошла ошибка',
     });
   }
 };
@@ -54,12 +54,12 @@ module.exports.deleteCard = async (req, res) => {
   } catch (e) {
     if (e.name === 'CastError') {
       res.status(INCORRECT_DATA_ERROR_CODE).json({
-        message: 'Переданы не валидные данные'
+        message: 'Переданы не валидные данные',
       });
       return;
     }
     res.status(DEFAULT_ERROR_CODE).json({
-      message: 'Не удалось удалить карточку',
+      message: 'На сервере произошла ошибка',
     });
   }
 };
@@ -84,12 +84,12 @@ const handleCardLike = async (req, res, options) => {
   } catch (e) {
     if (e.name === 'CastError') {
       res.status(INCORRECT_DATA_ERROR_CODE).json({
-        message: 'Переданы не валидные данные'
+        message: 'Переданы не валидные данные',
       });
       return;
     }
     res.status(DEFAULT_ERROR_CODE).json({
-      message: 'Не удалось изменить карточку',
+      message: 'На сервере произошла ошибка',
     });
   }
 };
