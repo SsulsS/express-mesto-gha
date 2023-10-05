@@ -5,7 +5,7 @@ const {
   getUser,
   createUser,
   updateUserName,
-  updateUserAvatar
+  updateUserAvatar,
 } = require('../controllers/user');
 
 userRoutes.get('/', getUsers);
