@@ -26,14 +26,14 @@ module.exports.getUser = async (req, res, next) => {
 
     if (!user) {
       return res.status(NOT_FOUND_ERROR_CODE).json({
-        message: 'Пользователь не найден',
+        message: 'передан неверный логин или пароль',
       });
     }
 
     res.send(user);
   } catch (e) {
     if (e.name === 'CastError') {
-      next(new BadRequestError('Переданы не валидные данные'));
+      next(new BadRequestError('На сервере произошла ошибка'));
     } else {
       next(e);
     }
@@ -58,9 +58,9 @@ module.exports.createUser = async (req, res, next) => {
     });
   } catch (e) {
     if (e.code === 11000) {
-      next(new ConflictError('Пользователь с данным email уже зарегистрирован'));
+      next(new ConflictError('при регистрации указан email, который уже существует на сервере'));
     } else if (e.name === 'CastError') {
-      next(new BadRequestError('Переданы не валидные данные'));
+      next(new BadRequestError('На сервере произошла ошибка'));
     } else {
       next(e);
     }
