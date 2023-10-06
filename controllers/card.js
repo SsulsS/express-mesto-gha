@@ -4,21 +4,22 @@ const {
   DEFAULT_ERROR_CODE,
   INCORRECT_DATA_ERROR_CODE,
 } = require('../utils/constants');
+const BadRequestError = require('../utils/errors/badRequestError');
+const NotFoundError = require('../utils/errors/notFoundError');
+const ForbiddenError = require('../utils/errors/forbiddenError');
 
 const USER_REF = [{ path: 'likes', model: 'user' }];
 
-module.exports.getCards = async (req, res) => {
+module.exports.getCards = async (req, res, next) => {
   try {
     const cards = await Card.find({});
     res.send(cards);
   } catch (e) {
-    res.status(DEFAULT_ERROR_CODE).json({
-      message: 'На сервере произошла ошибка',
-    });
+    next(e);
   }
 };
 
-module.exports.createCard = async (req, res) => {
+module.exports.createCard = async (req, res, next) => {
   try {
     const { name, link } = req.body;
     const card = await Card.create({ name, link, owner: req.user._id });
@@ -28,24 +29,21 @@ module.exports.createCard = async (req, res) => {
     });
   } catch (e) {
     if (e.name === 'ValidationError') {
-      res.status(INCORRECT_DATA_ERROR_CODE).json({
-        message: 'Переданы не валидные данные',
-      });
-      return;
+      next(new BadRequestError(e.message));
+    } else {
+      next(e);
     }
-    res.status(DEFAULT_ERROR_CODE).json({
-      message: 'На сервере произошла ошибка',
-    });
   }
 };
 
-module.exports.deleteCard = async (req, res) => {
+module.exports.deleteCard = async (req, res, next) => {
   try {
     const card = await Card.findById(req.params.cardId);
     if (!card) {
-      return res.status(NOT_FOUND_ERROR_CODE).json({
-        message: 'Карточка не найдена',
-      });
+      return new NotFoundError('Карточка не найдена');
+    }
+    if (card.owner.toString() !== req.params.cardId) {
+      return new ForbiddenError('Нельзя удалять чужие карточки');
     }
     const cardDelete = await Card.findByIdAndRemove(req.params.cardId);
     res.send({
@@ -53,18 +51,14 @@ module.exports.deleteCard = async (req, res) => {
     });
   } catch (e) {
     if (e.name === 'CastError') {
-      res.status(INCORRECT_DATA_ERROR_CODE).json({
-        message: 'Переданы не валидные данные',
-      });
-      return;
+      next(new BadRequestError('Переданы не валидные данные'));
+    } else {
+      next(e);
     }
-    res.status(DEFAULT_ERROR_CODE).json({
-      message: 'На сервере произошла ошибка',
-    });
   }
 };
 
-const handleCardLike = async (req, res, options) => {
+const handleCardLike = async (req, res, next, options) => {
   try {
     const action = options.addLike ? '$addToSet' : '$pull';
 
@@ -75,22 +69,16 @@ const handleCardLike = async (req, res, options) => {
     ).populate(USER_REF);
 
     if (!updatedCard) {
-      return res.status(NOT_FOUND_ERROR_CODE).json({
-        message: 'Карточка не найдена',
-      });
+      return new NotFoundError('Карточка не найдена');
     }
 
     res.send(updatedCard);
   } catch (e) {
     if (e.name === 'CastError') {
-      res.status(INCORRECT_DATA_ERROR_CODE).json({
-        message: 'Переданы не валидные данные',
-      });
-      return;
+      next(new BadRequestError('Переданы не валидные данные'));
+    } else {
+      next(e);
     }
-    res.status(DEFAULT_ERROR_CODE).json({
-      message: 'На сервере произошла ошибка',
-    });
   }
 };
 
